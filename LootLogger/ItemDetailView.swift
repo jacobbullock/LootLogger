@@ -25,7 +25,17 @@ struct FormFieldView: View {
 
 struct ItemDetailView : View {
     
+    @EnvironmentObject var store: ItemStore
+    
     var item: Item
+    
+    var itemIndex: Int {
+        store.items.firstIndex(where: { $0.id == item.id })!
+    }
+    
+    var currentItem: Binding<Item> {
+         $store.items[itemIndex]
+    }
     
     var body: some View {
         Form {
@@ -43,15 +53,15 @@ struct ItemDetailView : View {
 
                 FormFieldView(title: "Name",
                               placeholder: "",
-                              value: .constant("\(item.name)"))
+                              value: currentItem.name)
                     
                 FormFieldView(title: "Serial",
                               placeholder: "",
-                              value: .constant("\(item.serial)"))
+                              value: currentItem.serial)
                     
                 FormFieldView(title: "Value",
                               placeholder: "",
-                              value: .constant("\(item.itemValue)"))
+                              value: currentItem.itemValue)
           }
         }
         .navigationBarTitle("Item Detail")
